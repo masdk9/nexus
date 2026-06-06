@@ -1,49 +1,1427 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Homepage</title>
-    <style>
-        /* CSS styling */
-        body {
-            font-family: sans-serif;
-            background-color: #121212;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        .container {
-            padding: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Nexus</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="css/core.css">
+<link rel="stylesheet" href="stylesheet/auth.css">
+<link rel="stylesheet" href="stylesheet/feed.css">
+<link rel="stylesheet" href="stylesheet/secondary.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+<script src="javascript/firebase.js"></script>
+<script src="javascript/app.js"></script>
+<script src="javascript/auth.js"></script>
+<script src="javascript/feed.js"></script>
+<script src="javascript/secondary.js"></script>
+
+<noscript>
+  <style>body{display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;text-align:center;padding:20px}</style>
+  <p>Nexus requires JavaScript. Please enable JavaScript or use a modern browser like Chrome or Firefox.</p>
+</noscript>
 </head>
 <body>
+<div id="app">
 
-    <div class="container">
-        <h1>Welcome to Nexus</h1>
-        <p>Yeh hamara simple homepage hai, bina kisi external file ke.</p>
-        <button onclick="showMessage()">Click Me</button>
+<!-- ════ SPLASH ════ -->
+<div class="screen active" id="scr-splash" style="align-items:center;justify-content:center">
+  <div class="splash-logo-wrap">
+    <div class="splash-ring"></div>
+    <div class="splash-inner"><i class="bi bi-mortarboard-fill"></i></div>
+  </div>
+  <div class="splash-name">NEX<span>US</span></div>
+  <div class="splash-tag">Learn · Share · Grow</div>
+  <div class="splash-bar"><div class="splash-bar-fill" id="splash-fill"></div></div>
+</div>
+
+<!-- ════ ONBOARDING 1 ════ -->
+<div class="screen" id="scr-ob1" style="position:relative;justify-content:flex-end;padding-bottom:0">
+  <div class="ob-illu">
+    <div class="ob-illu-inner">
+      <div class="ob-card ob-card-1">
+        <div class="ob-card-tag">MCQ</div>
+        <div style="font-size:11px;margin-bottom:6px">Photosynthesis occurs in?</div>
+        <span class="ob-opt correct">Chloroplast ✓</span><span class="ob-opt">Nucleus</span>
+      </div>
+      <div class="ob-card ob-card-2">
+        <div class="ob-card-tag">Note</div>
+        <div style="font-size:11px">Newton's 2nd Law: F = ma 📝</div>
+      </div>
+      <div class="ob-card ob-card-3">
+        <div class="ob-card-tag">True / False</div>
+        <div style="font-size:11px;margin-bottom:5px">Speed of light 3×10⁸ m/s</div>
+        <span class="ob-opt correct">True ✓</span><span class="ob-opt">False</span>
+      </div>
+    </div>
+    <div class="ob-fade"></div>
+  </div>
+  <div class="ob-content">
+    <div class="ob-dots"><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <div class="ob-title">Share <span>Knowledge</span><br>Your Way</div>
+    <div class="ob-desc">Post MCQs, True/False, flashcards, notes & more. Make learning interactive for everyone.</div>
+    <button class="btn-primary" onclick="NX.goTo('scr-ob2')">Continue</button>
+    <button class="btn-ghost" style="margin-top:10px" onclick="NX.goTo('scr-auth')">Skip</button>
+  </div>
+</div>
+
+<!-- ════ ONBOARDING 2 ════ -->
+<div class="screen" id="scr-ob2" style="position:relative;justify-content:flex-end;padding-bottom:0">
+  <div class="ob-illu">
+    <div class="ob-illu-inner">
+      <div style="display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;height:100%">
+        <div class="ob-card" style="width:220px;text-align:left">
+          <div class="ob-card-tag">Doubt</div>
+          <div style="font-size:11px">What is the difference between RAM and ROM?</div>
+          <div style="margin-top:8px;font-size:10px;color:var(--accent)">3 answers · 12 likes</div>
+        </div>
+        <div class="ob-card" style="width:220px;text-align:left;margin-left:20px">
+          <div class="ob-card-tag" style="background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)">Answer</div>
+          <div style="font-size:11px">RAM is volatile, ROM is non-volatile memory...</div>
+        </div>
+      </div>
+    </div>
+    <div class="ob-fade"></div>
+  </div>
+  <div class="ob-content">
+    <div class="ob-dots"><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <div class="ob-title">Ask <span>Questions</span><br>Get Answers</div>
+    <div class="ob-desc">Post your doubts, get answers from fellow students. Peer-to-peer learning made simple.</div>
+    <button class="btn-primary" onclick="NX.goTo('scr-ob3')">Continue</button>
+    <button class="btn-ghost" style="margin-top:10px" onclick="NX.goTo('scr-auth')">Skip</button>
+  </div>
+</div>
+
+<!-- ════ ONBOARDING 3 ════ -->
+<div class="screen" id="scr-ob3" style="position:relative;justify-content:flex-end;padding-bottom:0">
+  <div class="ob-illu">
+    <div class="ob-illu-inner">
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;height:100%">
+        <div class="ob-card" style="width:230px">
+          <div class="ob-card-tag" style="background:color-mix(in srgb,#1e3a8a 20%,transparent);color:#93c5fd">SSC CGL</div>
+          <div style="font-size:11px;font-weight:600;margin-bottom:4px">Admit Card Released 📄</div>
+          <div style="font-size:10px;color:var(--muted)">Download from ssc.nic.in · 2hr ago</div>
+        </div>
+        <div class="ob-card" style="width:230px;margin-left:16px">
+          <div class="ob-card-tag" style="background:color-mix(in srgb,#064e3b 20%,transparent);color:#6ee7b7">Railway NTPC</div>
+          <div style="font-size:11px;font-weight:600;margin-bottom:4px">Result Out! 🎉</div>
+          <div style="font-size:10px;color:var(--muted)">Check your score · 5hr ago</div>
+        </div>
+      </div>
+    </div>
+    <div class="ob-fade"></div>
+  </div>
+  <div class="ob-content">
+    <div class="ob-dots"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <div class="ob-title">Find <span>Notes</span><br>& Updates</div>
+    <div class="ob-desc">Explore study notes, PYQs, job alerts, admit cards, results — all in one place.</div>
+    <button class="btn-primary" onclick="NX.goTo('scr-ob4')">Continue</button>
+    <button class="btn-ghost" style="margin-top:10px" onclick="NX.goTo('scr-auth')">Skip</button>
+  </div>
+</div>
+
+<!-- ════ ONBOARDING 4 ════ -->
+<div class="screen" id="scr-ob4" style="position:relative;justify-content:flex-end;padding-bottom:0">
+  <div class="ob-illu">
+    <div class="ob-illu-inner">
+      <div class="flashcard" style="width:210px;height:110px;position:relative;z-index:2" onclick="this.classList.toggle('flipped')">
+        <div class="fc-inner">
+          <div class="fc-front"><span class="fc-lbl">Question</span><p>What is the full form of DNA?</p><span class="fc-hint"><i class="bi bi-arrow-repeat"></i> Tap to flip</span></div>
+          <div class="fc-back"><span class="fc-lbl">Answer</span><p>Deoxyribonucleic Acid</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="ob-fade"></div>
+  </div>
+  <div class="ob-content">
+    <div class="ob-dots"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div></div>
+    <div class="ob-title">Test Your <span>Skills</span><br>Daily</div>
+    <div class="ob-desc">Attempt MCQs, True/False polls, flip flashcards — track your progress every day.</div>
+    <button class="btn-primary" onclick="NX.goTo('scr-ob5')">Continue</button>
+    <button class="btn-ghost" style="margin-top:10px" onclick="NX.goTo('scr-auth')">Skip</button>
+  </div>
+</div>
+
+<!-- ════ ONBOARDING 5 ════ -->
+<div class="screen" id="scr-ob5" style="align-items:center;justify-content:space-between;padding-bottom:0">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center">
+    <div style="position:relative;width:100px;height:100px">
+      <div style="position:absolute;inset:0;border-radius:50%;border:2px solid var(--accent);opacity:.4;animation:spin 12s linear infinite"></div>
+      <div style="position:absolute;inset:10px;border-radius:50%;border:1.5px dashed var(--accent);opacity:.3;animation:spin 8s linear infinite reverse"></div>
+      <div style="position:absolute;inset:18px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center">
+        <i class="bi bi-mortarboard-fill" style="font-size:28px;color:#fff"></i>
+      </div>
+    </div>
+  </div>
+  <div class="ob-content" style="width:100%;padding-bottom:40px">
+    <div class="ob-dots" style="justify-content:center"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div></div>
+    <div class="ob-title" style="text-align:center">Your <span>Study</span><br>Community Awaits</div>
+    <div class="ob-desc" style="text-align:center">Join thousands of students. Prepare smarter. Together.</div>
+    <button class="btn-primary" onclick="NX.goTo('scr-auth')">Get Started</button>
+    <button class="btn-ghost" style="margin-top:10px" onclick="NX.goTo('scr-auth');switchAuthTab('login')">Already have an account? Log In</button>
+  </div>
+</div>
+
+<!-- ════ AUTH ════ -->
+<div class="screen" id="scr-auth">
+  <div class="auth-header">
+    <div class="auth-logo-box"><i class="bi bi-mortarboard-fill"></i></div>
+    <div class="auth-logo-txt">NEX<span>US</span></div>
+  </div>
+  <div class="auth-tabs">
+    <div class="auth-tab active" id="at-login" onclick="switchAuthTab('login')">Log In</div>
+    <div class="auth-tab" id="at-signup" onclick="switchAuthTab('signup')">Sign Up</div>
+  </div>
+  <div class="auth-body" id="auth-body">
+    <div class="auth-panel active" id="ap-login">
+      <div class="auth-hero">
+        <div class="auth-pill"><span class="pill-dot"></span>Student Platform</div>
+        <div class="auth-title">Welcome<br>Back <span>👋</span></div>
+        <div class="auth-sub">Log in to continue your learning journey</div>
+      </div>
+      <div class="auth-fields">
+        <div class="inp-field">
+          <div class="inp-label">Email Address</div>
+          <div class="inp-wrap"><i class="bi bi-envelope inp-ico"></i>
+            <input class="inp" type="email" id="l-email" placeholder="you@example.com" oninput="NX.clearErr('l-email-e')">
+          </div>
+          <div class="err-msg" id="l-email-e">Please enter a valid email</div>
+        </div>
+        <div class="inp-field">
+          <div class="inp-label">Password</div>
+          <div class="inp-wrap pw-wrap"><i class="bi bi-lock inp-ico"></i>
+            <input class="inp" type="password" id="l-pw" placeholder="Enter your password" oninput="NX.clearErr('l-pw-e')">
+            <button class="pw-eye" data-for="l-pw"><i class="bi bi-eye"></i></button>
+          </div>
+          <div class="err-msg" id="l-pw-e">Incorrect email or password</div>
+        </div>
+      </div>
+      <div class="forgot-row" style="margin-top:10px">
+        <button class="forgot-btn" onclick="handleForgot()">Forgot password?</button>
+      </div>
+      <button class="btn-primary" style="margin-top:16px" onclick="handleLogin()">Log In to Nexus</button>
+      <div class="auth-switch">New to Nexus? <span onclick="switchAuthTab('signup')">Create account</span></div>
+    </div>
+    <div class="auth-panel" id="ap-signup">
+      <div class="auth-hero">
+        <div class="auth-pill"><span class="pill-dot"></span>Join Free</div>
+        <div class="auth-title">Create Your<br><span>Account</span></div>
+        <div class="auth-sub">Join thousands of students on Nexus</div>
+      </div>
+      <div class="auth-fields">
+        <div class="sec-divider">Personal Info</div>
+        <div class="inp-field">
+          <div class="inp-label">Full Name</div>
+          <div class="inp-wrap"><i class="bi bi-person inp-ico"></i>
+            <input class="inp" type="text" id="s-name" placeholder="Your full name" oninput="NX.clearErr('s-name-e')">
+          </div>
+          <div class="err-msg" id="s-name-e">Name is required</div>
+        </div>
+        <div class="inp-field">
+          <div class="inp-label">Email Address</div>
+          <div class="inp-wrap"><i class="bi bi-envelope inp-ico"></i>
+            <input class="inp" type="email" id="s-email" placeholder="you@example.com" oninput="NX.clearErr('s-email-e')">
+          </div>
+          <div class="err-msg" id="s-email-e">Please enter a valid email</div>
+        </div>
+        <div class="inp-field">
+          <div class="inp-label">Date of Birth</div>
+          <div class="dob-row">
+            <div class="inp-field">
+              <select class="sel" id="s-dd" onchange="NX.clearErr('s-dob-e')"><option value="">Day</option></select>
+            </div>
+            <div class="inp-field">
+              <select class="sel" id="s-mm" onchange="NX.clearErr('s-dob-e')">
+                <option value="">Month</option>
+                <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+                <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+                <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+                <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+              </select>
+            </div>
+            <div class="inp-field">
+              <select class="sel" id="s-yy" onchange="NX.clearErr('s-dob-e')"><option value="">Year</option></select>
+            </div>
+          </div>
+          <div class="err-msg" id="s-dob-e">Please select your date of birth</div>
+        </div>
+        <div class="inp-field">
+          <div class="inp-label">Gender</div>
+          <div class="gender-row">
+            <div class="gender-opt" onclick="selGender(this,'Male')">♂ Male</div>
+            <div class="gender-opt" onclick="selGender(this,'Female')">♀ Female</div>
+            <div class="gender-opt" onclick="selGender(this,'Other')">Other</div>
+          </div>
+          <div class="err-msg" id="s-gender-e">Please select gender</div>
+        </div>
+        <div class="sec-divider">Account Setup</div>
+        <div class="inp-field">
+          <div class="inp-label">Password</div>
+          <div class="inp-wrap pw-wrap"><i class="bi bi-lock inp-ico"></i>
+            <input class="inp" type="password" id="s-pw" placeholder="Create a strong password"
+              oninput="onPwInput(this);NX.clearErr('s-pw-e')">
+            <button class="pw-eye" data-for="s-pw"><i class="bi bi-eye"></i></button>
+          </div>
+          <div class="pw-strength" id="pw-strength">
+            <div class="str-bars">
+              <div class="str-bar" id="sb1"></div><div class="str-bar" id="sb2"></div><div class="str-bar" id="sb3"></div>
+            </div>
+            <div class="str-lbl" id="s-lbl"></div>
+          </div>
+          <div class="err-msg" id="s-pw-e">Password must be at least 6 characters</div>
+        </div>
+        <div class="inp-field">
+          <div class="inp-label">Confirm Password</div>
+          <div class="inp-wrap pw-wrap"><i class="bi bi-lock inp-ico"></i>
+            <input class="inp" type="password" id="s-cpw" placeholder="Re-enter password" oninput="NX.clearErr('s-cpw-e')">
+            <button class="pw-eye" data-for="s-cpw"><i class="bi bi-eye"></i></button>
+          </div>
+          <div class="err-msg" id="s-cpw-e">Passwords do not match</div>
+        </div>
+      </div>
+      <div class="auth-terms">By signing up you agree to <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></div>
+      <button class="btn-primary" style="margin-top:12px" onclick="handleSignup()">Create My Account</button>
+      <div class="auth-switch">Already have an account? <span onclick="switchAuthTab('login')">Log In</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ FEED ════ -->
+<div class="screen" id="scr-feed" style="flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-logo">NEX<span>US</span></div>
+    <div class="topbar-icons">
+      <div class="topbar-icon" onclick="NX.navTo('scr-inbox')">
+        <i class="bi bi-chat-square-dots"></i>
+        <div class="topbar-badge" id="dm-badge" style="display:none">0</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-area" id="feed-scroll">
+    <div class="compose-bar" onclick="openCreate()">
+      <div class="av av-md av-init" id="compose-av">ME</div>
+      <div class="compose-placeholder">Share your study progress, doubts, or notes.</div>
+    </div>
+    <div id="feed-posts"><div style="text-align:center;padding:40px;color:var(--muted)">Loading posts…</div></div>
+  </div>
+  <nav class="bnav">
+    <div class="bnav-item active" id="nav-home" onclick="NX.navTo('scr-feed')"><i class="bi bi-house-fill"></i><span class="bnav-label">Home</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" id="nav-notif" onclick="NX.navTo('scr-notif')"><i class="bi bi-bell"></i><span class="bnav-label">Alerts</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" id="nav-search" onclick="NX.navTo('scr-search')"><i class="bi bi-search"></i><span class="bnav-label">Search</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" id="nav-study" onclick="NX.navTo('scr-study')"><i class="bi bi-book"></i><span class="bnav-label">Study</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" id="nav-profile" onclick="NX.navTo('scr-profile')"><i class="bi bi-person"></i><span class="bnav-label">Profile</span><div class="bnav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ════ NOTIFICATIONS ════ -->
+<div class="screen" id="scr-notif" style="flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-logo">NEX<span>US</span></div>
+    <span style="font-size:13px;color:var(--accent);cursor:pointer" onclick="NX.secondary.markAllRead().then(()=>NX.toast('All marked as read!'))">Mark all read</span>
+  </div>
+  <div class="scroll-area" id="notif-list"><div style="text-align:center;padding:40px;color:var(--muted)">Loading…</div></div>
+  <nav class="bnav">
+    <div class="bnav-item" onclick="NX.navTo('scr-feed')"><i class="bi bi-house"></i><span class="bnav-label">Home</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item active"><i class="bi bi-bell-fill"></i><span class="bnav-label">Alerts</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-search')"><i class="bi bi-search"></i><span class="bnav-label">Search</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-study')"><i class="bi bi-book"></i><span class="bnav-label">Study</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-profile')"><i class="bi bi-person"></i><span class="bnav-label">Profile</span><div class="bnav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ════ SEARCH ════ -->
+<div class="screen" id="scr-search" style="flex-direction:column">
+  <div class="topbar"><div class="topbar-logo">NEX<span>US</span></div></div>
+  <div class="search-bar-wrap">
+    <div class="search-bar">
+      <i class="bi bi-search"></i>
+      <input class="search-inp" id="search-inp" placeholder="Search students, posts, topics…" oninput="handleSearch(this.value)">
+      <i class="bi bi-x-lg search-clear" id="search-clear" onclick="clearSearch()"></i>
+    </div>
+  </div>
+  <div class="search-tabs">
+    <div class="search-tab active" onclick="switchSTab(this)">All</div>
+    <div class="search-tab" onclick="switchSTab(this)">People</div>
+    <div class="search-tab" onclick="switchSTab(this)">Posts</div>
+  </div>
+  <div class="scroll-area" id="search-results">
+    <div id="search-default">
+      <div class="search-section-lbl">Trending Topics</div>
+      <div style="padding:6px 14px;display:flex;flex-wrap:wrap">
+        <div class="trending-tag" onclick="quickSearch('SSC CGL 2024')"><i class="bi bi-clipboard-check"></i> SSC CGL 2024 <span class="trending-count">2.4k</span></div>
+        <div class="trending-tag" onclick="quickSearch('Railway NTPC')"><i class="bi bi-train-front"></i> Railway NTPC <span class="trending-count">1.8k</span></div>
+        <div class="trending-tag" onclick="quickSearch('Bank PO')"><i class="bi bi-bank"></i> Bank PO <span class="trending-count">3.1k</span></div>
+        <div class="trending-tag" onclick="quickSearch('UPSC')"><i class="bi bi-award"></i> UPSC <span class="trending-count">4.2k</span></div>
+        <div class="trending-tag" onclick="quickSearch('Current Affairs')"><i class="bi bi-newspaper"></i> Current Affairs <span class="trending-count">5.6k</span></div>
+        <div class="trending-tag" onclick="quickSearch('GK Notes')"><i class="bi bi-lightbulb"></i> GK Notes <span class="trending-count">2.9k</span></div>
+      </div>
+      <div class="search-section-lbl" style="margin-top:8px">Suggested People</div>
+      <div id="suggested-users"></div>
+    </div>
+    <div id="search-active" style="display:none">
+      <div id="search-people"></div>
+      <div id="search-posts"></div>
+    </div>
+  </div>
+  <nav class="bnav">
+    <div class="bnav-item" onclick="NX.navTo('scr-feed')"><i class="bi bi-house"></i><span class="bnav-label">Home</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-notif')"><i class="bi bi-bell"></i><span class="bnav-label">Alerts</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item active"><i class="bi bi-search"></i><span class="bnav-label">Search</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-study')"><i class="bi bi-book"></i><span class="bnav-label">Study</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-profile')"><i class="bi bi-person"></i><span class="bnav-label">Profile</span><div class="bnav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ════ STUDY ════ -->
+<div class="screen" id="scr-study" style="flex-direction:column">
+  <div class="topbar"><div class="topbar-logo">NEX<span>US</span></div></div>
+  <div class="study-mini-grid">
+    <div class="study-mini-item active" onclick="filterStudy('all',this)"><div class="study-mini-ico"><i class="bi bi-pin-angle-fill"></i></div><div class="study-mini-lbl">All</div></div>
+    <div class="study-mini-item" onclick="filterStudy('SSC',this)"><div class="study-mini-ico"><i class="bi bi-building"></i></div><div class="study-mini-lbl">SSC</div></div>
+    <div class="study-mini-item" onclick="filterStudy('Railway',this)"><div class="study-mini-ico"><i class="bi bi-train-front"></i></div><div class="study-mini-lbl">Railway</div></div>
+    <div class="study-mini-item" onclick="filterStudy('Bank',this)"><div class="study-mini-ico"><i class="bi bi-bank"></i></div><div class="study-mini-lbl">Bank</div></div>
+    <div class="study-mini-item" onclick="filterStudy('IAS',this)"><div class="study-mini-ico"><i class="bi bi-award"></i></div><div class="study-mini-lbl">IAS/IPS</div></div>
+    <div class="study-mini-item" onclick="filterStudy('PCS',this)"><div class="study-mini-ico"><i class="bi bi-clipboard-check"></i></div><div class="study-mini-lbl">PCS</div></div>
+    <div class="study-mini-item" onclick="filterStudy('PYQ',this)"><div class="study-mini-ico"><i class="bi bi-journal-text"></i></div><div class="study-mini-lbl">PYQ</div></div>
+    <div class="study-mini-item" onclick="filterStudy('Exam',this)"><div class="study-mini-ico"><i class="bi bi-calendar-event"></i></div><div class="study-mini-lbl">Exams</div></div>
+    <div class="study-mini-item" onclick="filterStudy('Result',this)"><div class="study-mini-ico"><i class="bi bi-bar-chart"></i></div><div class="study-mini-lbl">Results</div></div>
+    <div class="study-mini-item" onclick="filterStudy('Job',this)"><div class="study-mini-ico"><i class="bi bi-briefcase"></i></div><div class="study-mini-lbl">Jobs</div></div>
+    <div class="study-mini-item" onclick="filterStudy('Admit',this)"><div class="study-mini-ico"><i class="bi bi-card-text"></i></div><div class="study-mini-lbl">Admit</div></div>
+    <div class="study-mini-item" onclick="filterStudy('Defence',this)"><div class="study-mini-ico"><i class="bi bi-shield"></i></div><div class="study-mini-lbl">Defence</div></div>
+  </div>
+  <div class="updates-label"><i class="bi bi-megaphone-fill"></i> Latest Updates</div>
+  <div class="scroll-area" id="study-updates"><div style="text-align:center;padding:30px;color:var(--muted)">Loading…</div></div>
+  <nav class="bnav">
+    <div class="bnav-item" onclick="NX.navTo('scr-feed')"><i class="bi bi-house"></i><span class="bnav-label">Home</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-notif')"><i class="bi bi-bell"></i><span class="bnav-label">Alerts</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-search')"><i class="bi bi-search"></i><span class="bnav-label">Search</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item active"><i class="bi bi-book-fill"></i><span class="bnav-label">Study</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-profile')"><i class="bi bi-person"></i><span class="bnav-label">Profile</span><div class="bnav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ════ PROFILE (MY) ════ -->
+<div class="screen" id="scr-profile" style="flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-logo">NEX<span>US</span></div>
+    <div class="topbar-icons">
+      <div class="topbar-icon" onclick="NX.navTo('scr-inbox')"><i class="bi bi-chat-square-dots"></i></div>
+    </div>
+  </div>
+  <div class="scroll-area">
+    <div class="profile-cover"><div class="profile-cover-pattern"></div>
+      <div class="profile-dp-wrap">
+        <div class="profile-dp" id="my-dp">ME</div>
+        <div class="profile-dp-edit" onclick="NX.goTo('scr-edit-profile')"><i class="bi bi-pencil-fill"></i></div>
+      </div>
+    </div>
+    <div class="profile-info">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+        <div>
+          <div class="profile-name" id="my-name">Loading…</div>
+          <div class="profile-handle" id="my-handle">#-----</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-icon-sm" onclick="NX.goTo('scr-settings')" title="Settings"><i class="bi bi-gear"></i></button>
+          <button class="btn-outline" onclick="NX.goTo('scr-edit-profile')">Edit Profile</button>
+        </div>
+      </div>
+      <div class="profile-bio" id="my-bio">Add a bio…</div>
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-num" id="my-posts">0</div><div class="pstat-lbl">Posts</div></div>
+        <div class="pstat"><div class="pstat-num" id="my-followers">0</div><div class="pstat-lbl">Followers</div></div>
+        <div class="pstat"><div class="pstat-num" id="my-following">0</div><div class="pstat-lbl">Following</div></div>
+      </div>
+      <div class="post-grid-tabs">
+        <div class="pg-tab active" onclick="switchPgTab('grid',this)"><i class="bi bi-grid-3x3-gap-fill"></i></div>
+        <div class="pg-tab" onclick="switchPgTab('list',this)"><i class="bi bi-list-ul"></i></div>
+      </div>
+    </div>
+    <div class="post-grid" id="my-post-grid"></div>
+    <div style="height:20px"></div>
+  </div>
+  <nav class="bnav">
+    <div class="bnav-item" onclick="NX.navTo('scr-feed')"><i class="bi bi-house"></i><span class="bnav-label">Home</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-notif')"><i class="bi bi-bell"></i><span class="bnav-label">Alerts</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-search')"><i class="bi bi-search"></i><span class="bnav-label">Search</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item" onclick="NX.navTo('scr-study')"><i class="bi bi-book"></i><span class="bnav-label">Study</span><div class="bnav-dot"></div></div>
+    <div class="bnav-item active"><i class="bi bi-person-fill"></i><span class="bnav-label">Profile</span><div class="bnav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ════ OTHER PROFILE ════ -->
+<div class="screen" id="scr-other-profile" style="flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-back" onclick="NX.goBack()"><i class="bi bi-chevron-left" style="font-size:22px"></i><span>Profile</span></div>
+    <div class="topbar-icon" onclick="NX.openModal('modal-profile-opts')"><i class="bi bi-three-dots"></i></div>
+  </div>
+  <div class="scroll-area">
+    <div class="profile-cover"><div class="profile-cover-pattern"></div>
+      <div class="profile-dp-wrap"><div class="profile-dp" id="other-dp">?</div></div>
+    </div>
+    <div class="profile-info">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+        <div>
+          <div class="profile-name" id="other-name">…</div>
+          <div class="profile-handle" id="other-handle">#-----</div>
+        </div>
+        <button class="follow-btn" id="other-follow-btn" onclick="handleFollowOther()">Follow</button>
+      </div>
+      <div class="profile-bio" id="other-bio"></div>
+      <div class="profile-stats">
+        <div class="pstat"><div class="pstat-num" id="other-posts">0</div><div class="pstat-lbl">Posts</div></div>
+        <div class="pstat"><div class="pstat-num" id="other-followers">0</div><div class="pstat-lbl">Followers</div></div>
+        <div class="pstat"><div class="pstat-num" id="other-following">0</div><div class="pstat-lbl">Following</div></div>
+      </div>
+      <div class="profile-btns">
+        <button class="follow-btn" style="flex:1" id="other-follow-btn2" onclick="handleFollowOther()">Follow</button>
+        <button class="btn-outline" style="flex:1" onclick="openDMOther()"><i class="bi bi-chat"></i> Message</button>
+      </div>
+    </div>
+    <div class="post-grid" id="other-post-grid"></div>
+    <div style="height:16px"></div>
+  </div>
+</div>
+
+<!-- ════ EDIT PROFILE ════ -->
+<div class="screen" id="scr-edit-profile" style="flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-back" onclick="NX.goBack()"><i class="bi bi-chevron-left" style="font-size:22px"></i><span>Edit Profile</span></div>
+    <button class="btn-outline" onclick="saveProfile()">Save</button>
+  </div>
+  <div class="scroll-area" style="padding:0 16px">
+    <div class="edit-dp-section">
+      <div class="edit-dp-preview" id="edit-dp-preview">ME</div>
+      <input type="file" id="dp-file-inp" accept="image/*" style="display:none" onchange="onDpSelected(this)">
+      <button class="edit-dp-btn" onclick="document.getElementById('dp-file-inp').click()"><i class="bi bi-camera"></i> Change Photo</button>
+      <div id="dp-upload-status" style="font-size:11px;color:var(--muted);margin-top:4px;display:none">Uploading…</div>
+    </div>
+    <div class="inp-field" style="margin-bottom:13px"><div class="inp-label">Full Name</div><input class="inp inp-plain" id="edit-name" placeholder="Your full name"></div>
+    <div class="inp-field" style="margin-bottom:13px"><div class="inp-label">Handle (Read-only)</div><input class="inp inp-plain" id="edit-handle" readonly style="color:var(--muted);cursor:not-allowed"></div>
+    <div class="inp-field" style="margin-bottom:13px"><div class="inp-label">Bio</div><textarea class="inp inp-plain" id="edit-bio" rows="3" style="resize:none;padding-top:12px" placeholder="Write about yourself…"></textarea></div>
+    <div class="inp-field" style="margin-bottom:13px"><div class="inp-label">Email</div><input class="inp inp-plain" id="edit-email" type="email" readonly style="color:var(--muted);cursor:not-allowed"></div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ════ SETTINGS ════ -->
+<div class="screen" id="scr-settings" style="flex-direction:column">
+  <div class="topbar"><div class="topbar-back" onclick="NX.goBack()"><i class="bi bi-chevron-left" style="font-size:22px"></i><span>Settings</span></div></div>
+  <div class="scroll-area">
+
+    <div class="settings-group">
+      <div class="settings-row" onclick="NX.goTo('scr-account-center')">
+        <div class="settings-ico"><i class="bi bi-person-circle"></i></div>
+        <div class="settings-info">
+          <div class="settings-title">Account Center</div>
+          <div class="settings-sub">Profile, privacy, password, delete account</div>
+        </div>
+        <div class="settings-right"><i class="bi bi-chevron-right"></i></div>
+      </div>
     </div>
 
-    <script>
-        // JavaScript logic
-        function showMessage() {
-            alert("Nexus is running successfully!");
-        }
-    </script>
+    <div class="settings-divider"></div>
+
+    <div class="settings-group">
+      <div class="settings-row" onclick="NX.goTo('scr-notif-settings')">
+        <div class="settings-ico"><i class="bi bi-bell"></i></div>
+        <div class="settings-info">
+          <div class="settings-title">Notifications</div>
+          <div class="settings-sub">Likes, comments, followers, updates</div>
+        </div>
+        <div class="settings-right"><i class="bi bi-chevron-right"></i></div>
+      </div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-group">
+      <div class="settings-label">Appearance</div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-moon-stars"></i></div><div class="settings-info"><div class="settings-title">Dark Mode</div></div><button class="toggle" id="toggle-theme" onclick="this.classList.toggle('on');NX.toggleTheme()"></button></div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-group">
+      <div class="settings-label">Security</div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-shield-check"></i></div><div class="settings-info"><div class="settings-title">Two-Factor Authentication</div></div><button class="toggle" onclick="this.classList.toggle('on')"></button></div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-group">
+      <div class="settings-label">Help & Support</div>
+      <div class="settings-row" onclick="NX.toast('FAQ — coming soon!')"><div class="settings-ico"><i class="bi bi-question-circle"></i></div><div class="settings-info"><div class="settings-title">FAQ</div></div><div class="settings-right"><i class="bi bi-chevron-right"></i></div></div>
+      <div class="settings-row" onclick="NX.toast('Coming soon!')"><div class="settings-ico"><i class="bi bi-bug"></i></div><div class="settings-info"><div class="settings-title">Report a Problem</div></div><div class="settings-right"><i class="bi bi-chevron-right"></i></div></div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div class="settings-group">
+      <div class="settings-label">About</div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-info-circle"></i></div><div class="settings-info"><div class="settings-title">App Version</div><div class="settings-sub">Nexus v2.0 Beta</div></div></div>
+      <div class="settings-row" onclick="NX.toast('Coming soon!')"><div class="settings-ico"><i class="bi bi-file-text"></i></div><div class="settings-info"><div class="settings-title">Terms of Service</div></div><div class="settings-right"><i class="bi bi-chevron-right"></i></div></div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <div style="padding:16px 14px 32px">
+      <button class="btn-logout-big" onclick="handleLogout()">
+        <i class="bi bi-box-arrow-right"></i> Log Out
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ ACCOUNT CENTER ════ -->
+<div class="screen" id="scr-account-center" style="flex-direction:column">
+  <div class="topbar"><div class="topbar-back" onclick="NX.goBack()"><i class="bi bi-chevron-left" style="font-size:22px"></i><span>Account Center</span></div></div>
+  <div class="scroll-area">
+    <div class="settings-group">
+      <div class="settings-label">Profile</div>
+      <div class="settings-row" onclick="NX.goTo('scr-edit-profile')"><div class="settings-ico"><i class="bi bi-person"></i></div><div class="settings-info"><div class="settings-title">Edit Profile</div><div class="settings-sub">Name, bio, photo</div></div><div class="settings-right"><i class="bi bi-chevron-right"></i></div></div>
+      <div class="settings-row" onclick="NX.toast('Coming soon!')"><div class="settings-ico"><i class="bi bi-envelope"></i></div><div class="settings-info"><div class="settings-title">Change Email</div><div class="settings-sub" id="settings-email">—</div></div><div class="settings-right"><i class="bi bi-chevron-right"></i></div></div>
+      <div class="settings-row" onclick="NX.toast('Coming soon!')"><div class="settings-ico"><i class="bi bi-lock"></i></div><div class="settings-info"><div class="settings-title">Change Password</div></div><div class="settings-right"><i class="bi bi-chevron-right"></i></div></div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-group">
+      <div class="settings-label">Privacy</div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-lock-fill"></i></div><div class="settings-info"><div class="settings-title">Private Account</div><div class="settings-sub">Only followers see your posts</div></div><button class="toggle" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-chat"></i></div><div class="settings-info"><div class="settings-title">Who can message you</div><div class="settings-sub">Everyone</div></div><div class="settings-right"><i class="bi bi-chevron-right"></i></div></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-people"></i></div><div class="settings-info"><div class="settings-title">Show Followers/Following</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-group">
+      <div class="settings-row" onclick="NX.toast('Coming soon!')"><div class="settings-ico" style="color:var(--err)"><i class="bi bi-trash"></i></div><div class="settings-info"><div class="settings-title danger">Delete Account</div><div class="settings-sub" style="color:var(--err);opacity:.7">Permanent action</div></div><div class="settings-right"><i class="bi bi-chevron-right"></i></div></div>
+    </div>
+    <div style="height:24px"></div>
+  </div>
+</div>
+
+<!-- ════ NOTIFICATION SETTINGS ════ -->
+<div class="screen" id="scr-notif-settings" style="flex-direction:column">
+  <div class="topbar"><div class="topbar-back" onclick="NX.goBack()"><i class="bi bi-chevron-left" style="font-size:22px"></i><span>Notifications</span></div></div>
+  <div class="scroll-area">
+    <div class="settings-group">
+      <div class="settings-label">Activity</div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-heart"></i></div><div class="settings-info"><div class="settings-title">Likes</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-chat"></i></div><div class="settings-info"><div class="settings-title">Comments</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-reply"></i></div><div class="settings-info"><div class="settings-title">Replies</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-person-plus"></i></div><div class="settings-info"><div class="settings-title">New Followers</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-share"></i></div><div class="settings-info"><div class="settings-title">Shares</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-group">
+      <div class="settings-label">Updates</div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-megaphone"></i></div><div class="settings-info"><div class="settings-title">Official Updates</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-briefcase"></i></div><div class="settings-info"><div class="settings-title">Job Alerts</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-card-text"></i></div><div class="settings-info"><div class="settings-title">Admit Cards</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+      <div class="settings-row"><div class="settings-ico"><i class="bi bi-bar-chart"></i></div><div class="settings-info"><div class="settings-title">Results</div></div><button class="toggle on" onclick="this.classList.toggle('on')"></button></div>
+    </div>
+    <div style="height:24px"></div>
+  </div>
+</div>
+
+<!-- ════ INBOX ════ -->
+<div class="screen" id="scr-inbox" style="flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-back" onclick="NX.goBack()"><i class="bi bi-chevron-left" style="font-size:22px"></i><span>Messages</span></div>
+    <div class="topbar-icon"><i class="bi bi-pencil-square"></i></div>
+  </div>
+  <div class="scroll-area" id="inbox-list"><div style="text-align:center;padding:40px;color:var(--muted)">Loading…</div></div>
+</div>
+
+<!-- ════ CHAT ════ -->
+<div class="screen" id="scr-chat" style="flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-back" onclick="NX.goBack()" style="display:flex;align-items:center;gap:10px">
+      <i class="bi bi-chevron-left" style="font-size:22px"></i>
+      <div class="av av-md av-init" id="chat-av" onclick="openChatProfile()">?</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer" id="chat-name" onclick="openChatProfile()">…</div>
+        <div style="font-size:10px;color:var(--ok)" id="chat-status">Online</div>
+      </div>
+    </div>
+    <div class="topbar-icon"><i class="bi bi-three-dots"></i></div>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-input-bar">
+    <input class="chat-inp" id="chat-inp" placeholder="Type a message…" onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="chat-send-btn" onclick="sendChat()"><i class="bi bi-send-fill"></i></button>
+  </div>
+</div>
+
+<!-- ════ CREATE POST ════ -->
+<div class="screen" id="scr-create" style="flex-direction:column">
+  <div class="topbar">
+    <div class="topbar-back" onclick="NX.goBack()" style="gap:8px"><i class="bi bi-x-lg" style="font-size:20px"></i><span>Create Post</span></div>
+    <button class="btn-outline" onclick="submitPost()">Post</button>
+  </div>
+  <div class="create-type-tabs">
+    <div class="create-tab active" onclick="switchCreateType('text',this)"><i class="bi bi-file-text"></i><div class="create-tab-lbl">Text</div></div>
+    <div class="create-tab" onclick="switchCreateType('media',this)"><i class="bi bi-image"></i><div class="create-tab-lbl">Media</div></div>
+    <div class="create-tab" onclick="switchCreateType('mcq',this)"><i class="bi bi-list-check"></i><div class="create-tab-lbl">MCQ</div></div>
+    <div class="create-tab" onclick="switchCreateType('tf',this)"><i class="bi bi-toggles"></i><div class="create-tab-lbl">Poll</div></div>
+    <div class="create-tab" onclick="switchCreateType('flash',this)"><i class="bi bi-card-text"></i><div class="create-tab-lbl">Card</div></div>
+  </div>
+  <div class="create-form" id="create-form"></div>
+  <div class="create-bottom">
+    <button class="btn-drafts" onclick="NX.goTo('scr-drafts')"><i class="bi bi-folder"></i> Drafts</button>
+    <button class="btn-save-draft" onclick="saveDraftNow()"><i class="bi bi-floppy"></i> Save Draft</button>
+  </div>
+</div>
+
+<!-- ════ DRAFTS ════ -->
+<div class="screen" id="scr-drafts" style="flex-direction:column">
+  <div class="topbar"><div class="topbar-back" onclick="NX.goBack()"><i class="bi bi-chevron-left" style="font-size:22px"></i><span>Drafts</span></div></div>
+  <div class="scroll-area" id="drafts-list"></div>
+</div>
+
+<!-- ════ MODALS ════ -->
+
+<!-- Post kebab menu -->
+<div class="modal-overlay" id="modal-post-menu" onclick="if(event.target===this)NX.closeModal('modal-post-menu')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-item" id="menu-copy"><i class="bi bi-link-45deg"></i>Copy Link</div>
+    <div class="modal-item" id="menu-share"><i class="bi bi-share"></i>Share via…</div>
+    <div class="modal-item" id="menu-hide"><i class="bi bi-eye-slash"></i>Not Interested</div>
+    <div class="modal-item" id="menu-follow"><i class="bi bi-person-plus"></i><span id="menu-follow-lbl">Follow</span></div>
+    <div class="modal-item" id="menu-mute"><i class="bi bi-volume-mute"></i><span id="menu-mute-lbl">Mute</span></div>
+    <div class="modal-item danger" id="menu-report"><i class="bi bi-flag"></i>Report</div>
+    <div class="modal-item danger" id="menu-block"><i class="bi bi-slash-circle"></i>Block</div>
+    <div class="modal-item danger" id="menu-delete"><i class="bi bi-trash"></i>Delete Post</div>
+    <div class="modal-item" id="menu-cancel"><i class="bi bi-x-lg"></i>Cancel</div>
+  </div>
+</div>
+
+<!-- Profile options -->
+<div class="modal-overlay" id="modal-profile-opts" onclick="if(event.target===this)NX.closeModal('modal-profile-opts')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-item" onclick="copyProfileLink()"><i class="bi bi-share"></i>Share Profile</div>
+    <div class="modal-item" onclick="copyHandle()"><i class="bi bi-clipboard"></i>Copy Handle</div>
+    <div class="modal-item danger" onclick="reportOther()"><i class="bi bi-flag"></i>Report User</div>
+    <div class="modal-item danger" onclick="blockOther()"><i class="bi bi-slash-circle"></i>Block User</div>
+    <div class="modal-item" onclick="NX.closeModal('modal-profile-opts')"><i class="bi bi-x-lg"></i>Cancel</div>
+  </div>
+</div>
+
+<!-- Report question modal -->
+<div class="modal-overlay" id="modal-report-question" onclick="if(event.target===this)NX.closeModal('modal-report-question')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div style="padding:0 16px 8px;font-size:14px;font-weight:700;color:var(--text)">Report this question</div>
+    <div style="padding:0 16px 10px;font-size:12px;color:var(--muted)">Why are you reporting this?</div>
+    <div class="modal-item" onclick="NX.feed.submitReport('wrong_answer')"><i class="bi bi-x-circle"></i>Wrong answer marked</div>
+    <div class="modal-item" onclick="NX.feed.submitReport('unclear')"><i class="bi bi-question-circle"></i>Question is unclear</div>
+    <div class="modal-item" onclick="NX.feed.submitReport('invalid')"><i class="bi bi-slash-circle"></i>Invalid / nonsense question</div>
+    <div class="modal-item" onclick="NX.feed.submitReport('spelling')"><i class="bi bi-type"></i>Spelling / grammar errors</div>
+    <div class="modal-item" onclick="NX.feed.submitReport('wrong_concept')"><i class="bi bi-lightbulb"></i>Wrong concept</div>
+    <div class="modal-item" onclick="NX.feed.submitReport('other')"><i class="bi bi-three-dots"></i>Other</div>
+    <div class="modal-item" onclick="NX.closeModal('modal-report-question')"><i class="bi bi-x-lg"></i>Cancel</div>
+  </div>
+</div>
+
+<div class="nx-loader" id="nx-loader"><div class="nx-spinner"></div><div class="nx-loader-txt" id="nx-loader-txt">Please wait…</div></div>
+<div class="nx-toast" id="nx-toast"></div>
+
+</div>
+
+<script>
+// ── Populate DOB dropdowns ──
+(function() {
+  const dd = document.getElementById('s-dd');
+  for (let i = 1; i <= 31; i++) dd.innerHTML += `<option value="${i}">${i}</option>`;
+  const yy = document.getElementById('s-yy');
+  const cy = new Date().getFullYear();
+  for (let y = cy - 10; y >= cy - 65; y--) yy.innerHTML += `<option value="${y}">${y}</option>`;
+})();
+
+NX.initTheme();
+NX.initPwEyes();
+NX.initSwipe();
+const tt = document.getElementById('toggle-theme');
+if (tt) tt.classList.toggle('on', NX.getTheme() === 'dark');
+
+// ── State ──
+let _myUid = null, _myProfile = null;
+let _otherUid = null;
+let _chatId = null, _chatUnsub = null;
+let _feedUnsub = null, _notifUnsub = null;
+let _selGender = '';
+let _createType = 'text', _bgColor = null, _correctOpt = null, _tfAns = null;
+
+// ── Splash ──
+document.getElementById('splash-fill').style.animation = 'loadBar 3s ease 0s both';
+
+NX.auth_module.onAuthChange(
+  async (user, profile) => {
+    _myUid = user.uid; _myProfile = profile;
+    NX.hideLoad();
+    await loadApp();
+  },
+  () => {
+    NX.hideLoad();
+    setTimeout(() => NX.goTo('scr-ob1'), 1500);
+  }
+);
+
+// ── Load app ──
+async function loadApp() {
+  if (!_myProfile) { NX.goTo('scr-auth'); return; }
+  const ini = NX.initials(_myProfile.name);
+  setEl('compose-av', ini);
+  setEl('my-dp', ini);
+  setEl('my-name', _myProfile.name);
+  setEl('my-handle', '#' + _myProfile.handle);
+  setEl('my-bio', _myProfile.bio || 'Add a bio…');
+  setEl('my-posts', _myProfile.posts || 0);
+  setEl('my-followers', NX.fmtNum(_myProfile.followers || 0));
+  setEl('my-following', NX.fmtNum(_myProfile.following || 0));
+  setEl('edit-dp-preview', ini);
+  val('edit-name', _myProfile.name || '');
+  val('edit-handle', '#' + _myProfile.handle);
+  val('edit-bio', _myProfile.bio || '');
+  val('edit-email', NX.auth_module?.currentUser()?.email || '');
+  setEl('settings-email', NX.auth_module.currentUser()?.email || '');
+  const themeT = document.getElementById('toggle-theme');
+  if (themeT) themeT.classList.toggle('on', NX.getTheme() === 'dark');
+
+  NX.navTo('scr-feed');
+
+  if (_feedUnsub) _feedUnsub();
+  _feedUnsub = NX.feed.listenFeed(posts => {
+    const c = document.getElementById('feed-posts');
+    if (!c) return;
+    if (!posts.length) {
+      c.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">No posts yet. Be first! 🚀</div>';
+      return;
+    }
+    c.innerHTML = posts.map(p => NX.feed.renderPost(p, _myUid)).join('');
+    posts.forEach(p => NX.feed.recordView(p.id));
+    NX.feed.initMenuActions();
+  });
+
+  if (_notifUnsub) _notifUnsub();
+  _notifUnsub = NX.secondary.listenNotifs(notifs => {
+    const list = document.getElementById('notif-list');
+    const badge = document.getElementById('notif-badge');
+    const unread = notifs.filter(n => !n.read).length;
+    if (badge) { badge.style.display = unread ? 'flex' : 'none'; badge.textContent = unread > 9 ? '9+' : unread; }
+    if (!list) return;
+    if (!notifs.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">No notifications yet</div>'; return; }
+    const today = notifs.filter(n => (Date.now() - (n.createdAt?.toDate?.() || new Date())) < 86400000);
+    const older = notifs.filter(n => !today.includes(n));
+    list.innerHTML =
+      (today.length ? '<div class="notif-section-lbl">New</div>' + today.map(n => NX.secondary.renderNotif(n)).join('') : '') +
+      (older.length ? '<div class="notif-section-lbl">Earlier</div>' + older.map(n => NX.secondary.renderNotif(n)).join('') : '');
+  });
+
+  NX.secondary.listenInbox(async chats => {
+    const list = document.getElementById('inbox-list');
+    if (!list) return;
+    if (!chats.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">No messages yet</div>'; return; }
+    let html = '';
+    for (const chat of chats) {
+      const oid = chat.participants.find(p => p !== _myUid);
+      const op = oid ? await NX.auth_module.getProfile(oid) : null;
+      if (!op) continue;
+      const ini = NX.initials(op.name);
+      html += `
+        <div class="dm-item" onclick="openChat('${chat.id}','${oid}','${NX.esc(op.name)}','${ini}')">
+          <div class="dm-av-wrap"><div class="av av-md av-init">${ini}</div></div>
+          <div class="dm-info">
+            <div class="dm-name">${NX.esc(op.name)}</div>
+            <div class="dm-preview">${NX.esc(chat.lastMessage||'…')}</div>
+          </div>
+          <div class="dm-meta">
+            <div class="dm-time">${chat.lastMessageAt ? NX.fmtTime(chat.lastMessageAt) : ''}</div>
+          </div>
+        </div>`;
+    }
+    list.innerHTML = html;
+  });
+
+  loadMyPosts();
+  loadStudy('all');
+  setTimeout(loadSuggested, 1000);
+}
+
+// ── Helpers ──
+function setEl(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; }
+function val(id, v)   { const e = document.getElementById(id); if (e) e.value = v; }
+
+async function loadMyPosts() {
+  const snap = await NX.db.collection('posts').where('authorId','==',_myUid).get();
+  const ps = snap.docs.map(d => ({ id:d.id,...d.data() })).sort((a,b) => {
+    const ta = a.createdAt?.toDate?.()?.getTime() || 0;
+    const tb = b.createdAt?.toDate?.()?.getTime() || 0;
+    return tb - ta;
+  });
+  const grid = document.getElementById('my-post-grid');
+  if (!grid) return;
+
+  if (!ps.length) {
+    grid.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted)">No posts yet</div>';
+    return;
+  }
+
+  grid.innerHTML = ps.map(p => {
+    let thumb = '';
+    if (p.type === 'media' && p.mediaUrl) {
+      if (p.mediaType === 'video') {
+        thumb = `<video src="${p.mediaUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)"></video>`;
+      } else {
+        thumb = `<img src="${p.mediaUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)" loading="lazy">`;
+      }
+    } else if (p.type === 'text' && p.bgColor) {
+      thumb = `<div style="width:100%;height:100%;background:${p.bgColor};border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;padding:6px;text-align:center;font-size:10px;font-weight:600;color:#fff;overflow:hidden;word-break:break-word">${NX.esc((p.text||'').substring(0,40))}</div>`;
+    } else {
+      const icons = { text:'bi-file-text', mcq:'bi-list-check', tf:'bi-toggles', flash:'bi-card-text', media:'bi-image' };
+      const snippets = { text: p.text, mcq: p.question, tf: p.question, flash: p.front, media: p.caption };
+      const snippet = (snippets[p.type]||'').substring(0,30);
+      thumb = `<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px">
+        <i class="bi ${icons[p.type]||'bi-file-text'}" style="font-size:20px;color:var(--accent)"></i>
+        <div style="font-size:9px;color:var(--muted);text-align:center;overflow:hidden;max-height:30px">${NX.esc(snippet)}</div>
+      </div>`;
+    }
+    return `
+      <div class="post-grid-item" onclick="openPostPreview('${p.id}')">
+        ${thumb}
+        <div class="post-grid-overlay">
+          <span><i class="bi bi-heart-fill"></i> ${p.likes||0}</span>
+          <span><i class="bi bi-chat-fill"></i> ${p.comments||0}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openPostPreview(postId) {
+  NX.toast('Post viewer coming soon!');
+}
+
+async function loadStudy(cat) {
+  const c = document.getElementById('study-updates');
+  if (!c) return;
+  c.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted)">Loading…</div>';
+  try {
+    const updates = await NX.secondary.loadUpdates(cat);
+    c.innerHTML = updates.length ? updates.map(u => NX.secondary.renderUpdate(u)).join('')
+      : '<div style="text-align:center;padding:30px;color:var(--muted)">No updates yet</div>';
+  } catch(e) {
+    c.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted)">Could not load</div>';
+  }
+}
+
+async function loadSuggested() {
+  const users = await NX.secondary.searchUsers('');
+  const c = document.getElementById('suggested-users');
+  if (c && users.length) c.innerHTML = users.slice(0,5).map(u => NX.secondary.renderUserRow(u, _myUid)).join('');
+}
+
+// ── Auth handlers ──
+function switchAuthTab(tab) {
+  ['login','signup'].forEach(t => {
+    document.getElementById('at-'+t).classList.toggle('active', t===tab);
+    document.getElementById('ap-'+t).classList.toggle('active', t===tab);
+  });
+  document.getElementById('auth-body').scrollTop = 0;
+}
+
+function selGender(el, g) {
+  document.querySelectorAll('.gender-opt').forEach(e => e.classList.remove('active'));
+  el.classList.add('active'); _selGender = g; NX.clearErr('s-gender-e');
+}
+
+function onPwInput(inp) {
+  const s = NX.pwStrength(inp.value);
+  NX.renderPwStrength(s, ['sb1','sb2','sb3'], 's-lbl');
+}
+
+async function handleLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pw = document.getElementById('l-pw').value;
+  let ok = true;
+  if (!email || !email.includes('@')) { NX.showErr('l-email-e'); ok = false; }
+  if (!pw) { NX.showErr('l-pw-e'); ok = false; }
+  if (!ok) return;
+  NX.showLoad('Logging in…');
+  try {
+    await NX.auth_module.login(email, pw);
+  } catch(e) {
+    NX.hideLoad();
+    const msgs = {
+      'auth/wrong-password':'Incorrect password',
+      'auth/user-not-found':'No account with this email',
+      'auth/invalid-credential':'Incorrect email or password',
+      'auth/network-request-failed':'Network error. Check your connection!',
+      'auth/too-many-requests':'Too many attempts. Please try later!'
+    };
+    NX.showErr('l-pw-e', msgs[e.code] || 'Login failed. Please try again.');
+  }
+}
+
+async function handleSignup() {
+  const name  = document.getElementById('s-name').value.trim();
+  const email = document.getElementById('s-email').value.trim();
+  const dd    = document.getElementById('s-dd').value;
+  const mm    = document.getElementById('s-mm').value;
+  const yy    = document.getElementById('s-yy').value;
+  const pw    = document.getElementById('s-pw').value;
+  const cpw   = document.getElementById('s-cpw').value;
+  let ok = true;
+  if (!name)                      { NX.showErr('s-name-e'); ok = false; }
+  if (!email || !email.includes('@')) { NX.showErr('s-email-e'); ok = false; }
+  if (!dd || !mm || !yy)          { NX.showErr('s-dob-e'); ok = false; }
+  if (!_selGender)                { NX.showErr('s-gender-e'); ok = false; }
+  if (pw.length < 6)              { NX.showErr('s-pw-e'); ok = false; }
+  if (pw !== cpw)                 { NX.showErr('s-cpw-e'); ok = false; }
+  if (!ok) return;
+  NX.showLoad('Creating account…');
+  try {
+    const dob = `${yy}-${String(mm).padStart(2,'0')}-${String(dd).padStart(2,'0')}`;
+    await NX.auth_module.signup({ name, email, dob, gender: _selGender, password: pw });
+    NX.setLoadMsg('Welcome to Nexus! 🎉');
+  } catch(e) {
+    NX.hideLoad();
+    if (e.code === 'server/underage')          NX.showErr('s-email-e', e.message);
+    else if (e.code === 'auth/email-already-in-use') NX.showErr('s-email-e', 'Email already registered');
+    else NX.showErr('s-email-e', 'Server error, please try again later');
+  }
+}
+
+async function handleForgot() {
+  const email = document.getElementById('l-email').value.trim();
+  if (!email || !email.includes('@')) { NX.showErr('l-email-e', 'Enter your email first'); return; }
+  NX.showLoad('Sending reset link…');
+  try {
+    await NX.auth_module.forgotPassword(email);
+    NX.hideLoad();
+    NX.toast('Reset link sent! Check your email.');
+  } catch {
+    NX.hideLoad();
+    NX.showErr('l-email-e', 'Email not found');
+  }
+}
+
+async function handleLogout() {
+  if (!confirm('Are you sure you want to log out?')) return;
+  NX.showLoad('Logging out…');
+  if (_feedUnsub) _feedUnsub();
+  if (_notifUnsub) _notifUnsub();
+  await NX.auth_module.logout();
+  NX.hideLoad();
+  NX.goTo('scr-auth');
+}
+
+// ── Profile ──
+NX.openProfile = async (uid) => {
+  if (uid === _myUid) { NX.navTo('scr-profile'); return; }
+  _otherUid = uid;
+  const p = await NX.auth_module.getProfile(uid);
+  if (!p) return;
+  setEl('other-dp', NX.initials(p.name));
+  setEl('other-name', p.name);
+  setEl('other-handle', '#'+(p.handle||''));
+  setEl('other-bio', p.bio||'');
+  setEl('other-posts', p.posts||0);
+  setEl('other-followers', NX.fmtNum(p.followers||0));
+  setEl('other-following', NX.fmtNum(p.following||0));
+  const f = await NX.auth_module.checkFollowing(uid);
+  ['other-follow-btn','other-follow-btn2'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) { btn.textContent = f ? 'Following' : 'Follow'; btn.classList.toggle('following', f); }
+  });
+  const snap = await NX.db.collection('posts').where('authorId','==',uid).get();
+  const ps = snap.docs.map(d => ({ id:d.id,...d.data() }));
+  const grid = document.getElementById('other-post-grid');
+  const icons = { text:'bi-file-text', mcq:'bi-list-check', tf:'bi-toggles', flash:'bi-card-text', media:'bi-image' };
+  if (grid) {
+    grid.innerHTML = ps.map(p => `
+      <div class="post-grid-item">
+        <i class="bi ${icons[p.type]||'bi-file-text'}" style="font-size:22px;color:var(--muted)"></i>
+        <div class="post-grid-overlay">
+          <span>❤ ${p.likes||0}</span>
+          <span>💬 ${p.comments||0}</span>
+        </div>
+      </div>`).join('');
+  }
+  NX.goTo('scr-other-profile');
+};
+
+async function handleFollowOther() {
+  if (!_otherUid) return;
+  const f = await NX.auth_module.toggleFollow(_otherUid);
+  ['other-follow-btn','other-follow-btn2'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) { btn.textContent = f ? 'Following' : 'Follow'; btn.classList.toggle('following', f); }
+  });
+}
+
+async function onDpSelected(inp) {
+  const file = inp.files[0];
+  if (!file) return;
+  const status = document.getElementById('dp-upload-status');
+  const preview = document.getElementById('edit-dp-preview');
+  if (status) { status.style.display = 'block'; status.textContent = 'Uploading…'; }
+  try {
+    const url = await NX.feed.uploadToCloudinary(file, NX.feed.CLOUDINARY_PRESET_AVATARS);
+    // Show image preview
+    if (preview) {
+      preview.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    }
+    // Save to profile
+    await NX.auth_module.updateProfile({ dp: url });
+    _myProfile.dp = url;
+    // Update feed avatar
+    const myDp = document.getElementById('my-dp');
+    if (myDp) myDp.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    if (status) { status.textContent = 'Photo updated!'; status.style.color = 'var(--ok)'; }
+    setTimeout(() => { if (status) status.style.display = 'none'; }, 2000);
+  } catch(e) {
+    if (status) { status.textContent = 'Upload failed. Try again.'; status.style.color = 'var(--err)'; }
+  }
+}
+
+async function saveProfile() {
+  const name = document.getElementById('edit-name').value.trim();
+  const bio  = document.getElementById('edit-bio').value.trim();
+  if (!name) { NX.toast('Name cannot be empty'); return; }
+  NX.showLoad('Saving…');
+  await NX.auth_module.updateProfile({ name, bio });
+  setEl('my-name', name); setEl('my-bio', bio || 'Add a bio…'); setEl('my-dp', NX.initials(name));
+  NX.hideLoad(); NX.goBack();
+  NX.toast('Profile updated!');
+}
+
+function switchPgTab(type, el) {
+  document.querySelectorAll('.pg-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function reportOther()  { if(_otherUid) NX.auth_module.reportUser(_otherUid); NX.closeModal('modal-profile-opts'); NX.toast('User reported'); }
+function blockOther()   { if(_otherUid) NX.auth_module.blockUser(_otherUid);  NX.closeModal('modal-profile-opts'); NX.toast('User blocked'); }
+function copyProfileLink() { navigator.clipboard?.writeText(location.origin+'/u/'+_otherUid); NX.toast('Link copied!'); NX.closeModal('modal-profile-opts'); }
+async function copyHandle() {
+  if (_otherUid) { const p = await NX.auth_module.getProfile(_otherUid); if(p) navigator.clipboard?.writeText('#'+p.handle); }
+  NX.toast('Handle copied!'); NX.closeModal('modal-profile-opts');
+}
+
+NX.secondary.markRead = async (id) => {
+  await NX.db.collection('notifications').doc(id).update({ read: true });
+};
+
+// ── Search ──
+let _st;
+function handleSearch(v) {
+  const clr = document.getElementById('search-clear');
+  const def = document.getElementById('search-default');
+  const act = document.getElementById('search-active');
+  if (clr) clr.style.display = v ? 'inline' : 'none';
+  if (!v) { if(def) def.style.display='block'; if(act) act.style.display='none'; return; }
+  if (def) def.style.display='none'; if (act) act.style.display='block';
+  clearTimeout(_st);
+  _st = setTimeout(async () => {
+    const [users, posts] = await Promise.all([NX.secondary.searchUsers(v), NX.secondary.searchPosts(v)]);
+    const pp = document.getElementById('search-people');
+    const po = document.getElementById('search-posts');
+    if (pp) pp.innerHTML = users.length ? '<div class="search-section-lbl">People</div>' + users.map(u => NX.secondary.renderUserRow(u, _myUid)).join('') : '';
+    if (po) po.innerHTML = posts.length ? '<div class="search-section-lbl">Posts</div>' + posts.map(p => `
+      <div class="post-mini">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+          <div class="av av-sm av-init">${NX.initials(p.authorName)}</div>
+          <div><div style="font-size:12px;font-weight:600">${NX.esc(p.authorName)}</div><div style="font-size:10px;color:var(--muted)">${NX.fmtTime(p.createdAt)}</div></div>
+        </div>
+        <div style="font-size:12px;color:var(--text2)">${NX.esc(p.text||p.question||p.front||p.caption||'')}</div>
+      </div>`).join('') : '';
+  }, 400);
+}
+function clearSearch() { document.getElementById('search-inp').value=''; handleSearch(''); }
+function quickSearch(term) { document.getElementById('search-inp').value=term; handleSearch(term); }
+function switchSTab(el) { document.querySelectorAll('.search-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); }
+
+// ── Study ──
+function filterStudy(cat, el) {
+  document.querySelectorAll('.study-mini-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  loadStudy(cat);
+}
+
+// ── Create post ──
+function openCreate() {
+  _createType='text'; _bgColor=null; _correctOpt=null; _tfAns=null;
+  switchCreateType('text', document.querySelector('.create-tab'));
+  NX.goTo('scr-create');
+}
+
+function switchCreateType(type, el) {
+  _createType = type;
+  document.querySelectorAll('.create-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const form = document.getElementById('create-form');
+  if (!form) return;
+  const forms = {
+    text: `
+      <textarea class="create-textarea" id="cp-text" placeholder="Share your study progress, doubts, or notes." rows="5"></textarea>
+      <div>
+        <div class="bg-color-label" style="margin-bottom:8px">Background Color</div>
+        <div class="bg-colors" id="bg-color-row"></div>
+      </div>`,
+    media: `
+      <textarea class="create-textarea" id="cp-caption" placeholder="Caption (optional)…" rows="3"></textarea>
+      <div class="media-upload" onclick="document.getElementById('media-inp').click()">
+        <i class="bi bi-cloud-upload"></i>
+        <div class="media-upload-txt">Tap to Upload</div>
+        <div class="media-upload-sub">Photo or 60 sec video</div>
+      </div>
+      <input type="file" id="media-inp" accept="image/*,video/*" style="display:none" onchange="onMedia(this)">
+      <div id="media-preview" style="display:none"></div>`,
+    mcq: `
+      <div class="inp-field">
+        <div class="inp-label">Question</div>
+        <textarea class="create-textarea" id="cp-q" placeholder="Write your question…" rows="3"></textarea>
+      </div>
+      <div class="inp-label">Options — mark the correct answer</div>
+      ${['A','B','C','D'].map(l => `
+        <div class="mcq-opt-row">
+          <input class="mcq-opt-inp" id="co-${l}" placeholder="Option ${l}">
+          <div class="correct-mark" id="cm-${l}" onclick="setCorrect('${l}')">✓ Correct</div>
+        </div>`).join('')}
+      <div class="inp-field">
+        <div class="inp-label">Explanation (optional)</div>
+        <textarea class="create-textarea" id="cp-exp" placeholder="Why is this the correct answer?" rows="3"></textarea>
+      </div>`,
+    tf: `
+      <div class="inp-field">
+        <div class="inp-label">Statement</div>
+        <textarea class="create-textarea" id="cp-stmt" placeholder="Write a True or False statement…" rows="3"></textarea>
+      </div>
+      <div class="inp-label">Correct Answer</div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <div class="gender-opt" id="tf-t" onclick="setTF('True')" style="flex:1;padding:13px;text-align:center"><i class="bi bi-check-lg"></i> True</div>
+        <div class="gender-opt" id="tf-f" onclick="setTF('False')" style="flex:1;padding:13px;text-align:center"><i class="bi bi-x-lg"></i> False</div>
+      </div>
+      <div class="inp-field" style="margin-top:12px">
+        <div class="inp-label">Explanation (optional)</div>
+        <textarea class="create-textarea" id="cp-tf-exp" placeholder="Why?" rows="3"></textarea>
+      </div>`,
+    flash: `
+      <div class="inp-field">
+        <div class="inp-label">Front — Question / Term</div>
+        <textarea class="create-textarea" id="cp-front" placeholder="Word / Term / Question…" rows="3"></textarea>
+      </div>
+      <div class="inp-field">
+        <div class="inp-label">Back — Answer / Meaning</div>
+        <textarea class="create-textarea" id="cp-back" placeholder="Meaning / Definition / Answer…" rows="3"></textarea>
+      </div>
+      <div style="font-size:11px;color:var(--muted)"><i class="bi bi-arrow-repeat"></i> Users tap to flip</div>`
+  };
+  form.innerHTML = forms[type] || '';
+  if (type === 'text') initBgColors();
+}
+
+function initBgColors() {
+  const row = document.getElementById('bg-color-row');
+  if (!row) return;
+  const none = document.createElement('div');
+  none.className = 'bg-circle none-opt selected'; none.textContent = '✕';
+  none.onclick = () => { _bgColor=null; document.querySelectorAll('.bg-circle').forEach(c=>c.classList.remove('selected')); none.classList.add('selected'); };
+  row.appendChild(none);
+  NX.feed.getBgColors().forEach(bg => {
+    const c = document.createElement('div');
+    c.className = 'bg-circle'; c.style.background = bg;
+    c.onclick = () => { _bgColor=bg; document.querySelectorAll('.bg-circle').forEach(x=>x.classList.remove('selected')); c.classList.add('selected'); };
+    row.appendChild(c);
+  });
+}
+
+function setCorrect(l) {
+  _correctOpt=l;
+  document.querySelectorAll('.correct-mark').forEach(m=>m.classList.remove('active'));
+  document.getElementById('cm-'+l)?.classList.add('active');
+}
+
+function setTF(ans) {
+  _tfAns=ans;
+  document.getElementById('tf-t')?.classList.toggle('active',ans==='True');
+  document.getElementById('tf-f')?.classList.toggle('active',ans==='False');
+}
+
+function onMedia(inp) {
+  const file = inp.files[0]; if(!file) return;
+  const w = document.getElementById('media-preview'); if(!w) return;
+  w.style.display = 'block';
+  const url = URL.createObjectURL(file);
+  w.innerHTML = file.type.startsWith('video/')
+    ? `<video src="${url}" controls style="width:100%;border-radius:var(--radius);max-height:200px"></video>`
+    : `<img src="${url}" style="width:100%;border-radius:var(--radius);max-height:200px;object-fit:cover">`;
+}
+
+async function submitPost() {
+  NX.showLoad('Posting…');
+  try {
+    let data = { type: _createType };
+    if (_createType==='text') {
+      const text = document.getElementById('cp-text')?.value?.trim();
+      if (!text) { NX.hideLoad(); NX.toast('Please write something!'); return; }
+      data.text=text; data.bgColor=_bgColor;
+    } else if (_createType==='media') {
+      data.caption=document.getElementById('cp-caption')?.value?.trim()||'';
+      const file=document.getElementById('media-inp')?.files?.[0];
+      data.file=file; data.mediaType=file?.type?.startsWith('video/')?'video':'image';
+    } else if (_createType==='mcq') {
+      const q=document.getElementById('cp-q')?.value?.trim();
+      const opts=['A','B','C','D'].map(l=>document.getElementById('co-'+l)?.value?.trim()||'');
+      if(!q){NX.hideLoad();NX.toast('Please write a question!');return;}
+      if(opts.filter(Boolean).length<2){NX.hideLoad();NX.toast('Add at least 2 options!');return;}
+      if(!_correctOpt){NX.hideLoad();NX.toast('Please mark the correct answer!');return;}
+      data.question=q; data.options=opts; data.correctIndex=['A','B','C','D'].indexOf(_correctOpt);
+      data.explanation=document.getElementById('cp-exp')?.value?.trim()||'';
+    } else if (_createType==='tf') {
+      const q=document.getElementById('cp-stmt')?.value?.trim();
+      if(!q){NX.hideLoad();NX.toast('Please write a statement!');return;}
+      if(!_tfAns){NX.hideLoad();NX.toast('Please select the correct answer!');return;}
+      data.question=q; data.correctAnswer=_tfAns;
+      data.explanation=document.getElementById('cp-tf-exp')?.value?.trim()||'';
+    } else if (_createType==='flash') {
+      const front=document.getElementById('cp-front')?.value?.trim();
+      const back=document.getElementById('cp-back')?.value?.trim();
+      if(!front||!back){NX.hideLoad();NX.toast('Please fill both Front and Back!');return;}
+      data.front=front; data.back=back;
+    }
+    await NX.feed.createPost(data);
+    NX.hideLoad(); NX.toast('Posted! 🎉'); NX.goBack(); NX.navTo('scr-feed');
+  } catch(e) {
+    NX.hideLoad();
+    NX.toast('Post failed — ' + (e.message||'Unknown error'));
+  }
+}
+
+function saveDraftNow() {
+  const d={type:_createType};
+  if(_createType==='text') d.text=document.getElementById('cp-text')?.value||'';
+  else if(_createType==='mcq') d.question=document.getElementById('cp-q')?.value||'';
+  else if(_createType==='tf') d.question=document.getElementById('cp-stmt')?.value||'';
+  else if(_createType==='flash') d.front=document.getElementById('cp-front')?.value||'';
+  else if(_createType==='media') d.caption=document.getElementById('cp-caption')?.value||'';
+  NX.saveDraft(d);
+  NX.toast('Draft saved!');
+  renderDrafts();
+}
+
+function renderDrafts() {
+  const drafts = NX.getDrafts();
+  const c = document.getElementById('drafts-list');
+  if (!c) return;
+  const icons = {text:'bi-file-text',mcq:'bi-list-check',tf:'bi-toggles',flash:'bi-card-text',media:'bi-image'};
+  c.innerHTML = drafts.length ? drafts.map(d => `
+    <div class="draft-item" onclick="loadDraft(${d.id})">
+      <div class="draft-ico"><i class="bi ${icons[d.type]||'bi-file-text'}"></i></div>
+      <div class="draft-info">
+        <div class="draft-title">${NX.esc(d.text||d.question||d.front||d.caption||'Untitled draft')}</div>
+        <div class="draft-time">${new Date(d.at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
+      </div>
+      <div class="draft-del" onclick="event.stopPropagation();deleteDraft(${d.id})"><i class="bi bi-trash"></i></div>
+    </div>`).join('') : '<div style="text-align:center;padding:40px;color:var(--muted)">No drafts saved</div>';
+}
+
+function loadDraft(id) {
+  const draft = NX.getDrafts().find(d=>d.id===id);
+  if(!draft) return;
+  switchCreateType(draft.type, null);
+  setTimeout(()=>{
+    if(draft.text){const e=document.getElementById('cp-text');if(e)e.value=draft.text;}
+    if(draft.question){const e=document.getElementById('cp-q')||document.getElementById('cp-stmt');if(e)e.value=draft.question;}
+    if(draft.front){const e=document.getElementById('cp-front');if(e)e.value=draft.front;}
+    if(draft.caption){const e=document.getElementById('cp-caption');if(e)e.value=draft.caption;}
+  },100);
+  NX.goTo('scr-create');
+}
+
+function deleteDraft(id) { NX.delDraft(id); renderDrafts(); }
+
+// ── Chat ──
+function openChat(chatId, otherUid, name, ini) {
+  _chatId=chatId; _otherUid=otherUid;
+  setEl('chat-av', ini); setEl('chat-name', name);
+  const msgs = document.getElementById('chat-messages'); if(msgs) msgs.innerHTML='';
+  if (_chatUnsub) _chatUnsub();
+  _chatUnsub = NX.secondary.listenMessages(chatId, messages => {
+    if (!msgs) return;
+    msgs.innerHTML = messages.map(m => NX.secondary.renderMsg(m, _myUid)).join('');
+    msgs.scrollTop = msgs.scrollHeight;
+  });
+  NX.goTo('scr-chat');
+}
+
+async function sendChat() {
+  const inp = document.getElementById('chat-inp');
+  if (!inp?.value.trim() || !_chatId) return;
+  const text = inp.value.trim(); inp.value='';
+  await NX.secondary.sendMsg(_chatId, text);
+}
+
+async function openDMOther() {
+  if (!_otherUid) return;
+  const chatId = await NX.secondary.getOrCreateChat(_otherUid);
+  const p = await NX.auth_module.getProfile(_otherUid);
+  if (chatId && p) openChat(chatId, _otherUid, p.name, NX.initials(p.name));
+}
+
+function openChatProfile() { if(_otherUid) NX.openProfile(_otherUid); }
+
+// ── Drafts screen observer ──
+document.querySelectorAll('.screen').forEach(s => {
+  new MutationObserver(() => {
+    if(s.id==='scr-drafts' && s.classList.contains('active')) renderDrafts();
+  }).observe(s, {attributeFilter:['class']});
+});
+
+// ── Back button fallback ──
+const _origGoBack = NX.goBack.bind(NX);
+NX.goBack = function() {
+  try { _origGoBack(); }
+  catch(e) { NX.navTo('scr-feed'); }
+};
+</script>
+
+<style>
+/* Settings logout big button */
+.btn-logout-big {
+  width: 100%; padding: 16px;
+  background: color-mix(in srgb, var(--err) 10%, transparent);
+  border: 1.5px solid var(--err);
+  border-radius: var(--radius-sm);
+  color: var(--err); font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 15px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; transition: all .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-logout-big:hover { background: color-mix(in srgb, var(--err) 18%, transparent); }
+
+/* Settings gear button next to Edit Profile */
+.btn-icon-sm {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: var(--bg2); border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--muted); cursor: pointer;
+  transition: all .2s; -webkit-tap-highlight-color: transparent;
+}
+.btn-icon-sm:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+
 </body>
 </html>
